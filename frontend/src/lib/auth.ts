@@ -91,3 +91,39 @@ export async function getCurrentUser() {
 
   return res.json();
 }
+
+export async function requestPasswordReset(email: string) {
+  const res = await fetch(`${BACKEND_URL}/api/v1/auth/password-reset/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!res.ok) {
+    return { error: "Something went wrong. Please try again." };
+  }
+
+  return { success: true };
+}
+
+export async function confirmPasswordReset(
+  uid: string,
+  token: string,
+  newPassword: string
+) {
+  const res = await fetch(
+    `${BACKEND_URL}/api/v1/auth/password-reset-confirm/`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid, token, new_password: newPassword }),
+    }
+  );
+
+  if (!res.ok) {
+    const data = await res.json();
+    return { error: data.detail ?? "Invalid or expired reset link." };
+  }
+
+  return { success: true };
+}

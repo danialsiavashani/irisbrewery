@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import Link from "next/link";
 import { loginSchema, type LoginInput } from "@/lib/validations";
 import { login } from "@/lib/auth";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
@@ -59,6 +59,14 @@ export function LoginForm() {
             </Field>
           )}
         />
+        <div className="flex justify-end">
+          <Link
+            href="/forgot-password"
+            className="text-sm text-muted-foreground underline underline-offset-4"
+          >
+            Forgot password?
+          </Link>
+        </div>
         {serverError && <p className="text-sm text-destructive">{serverError}</p>}
         <Button type="submit" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? "Logging in..." : "Log in"}
