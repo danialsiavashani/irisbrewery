@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { loginSchema, type LoginInput } from "@/lib/validations";
 import { login } from "@/lib/auth";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -53,7 +54,7 @@ export function LoginForm() {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-              <Input {...field} id={field.name} type="password" aria-invalid={fieldState.invalid} />
+              <PasswordInput {...field} id={field.name} aria-invalid={fieldState.invalid} />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
