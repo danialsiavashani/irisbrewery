@@ -7,7 +7,7 @@ class User(AbstractUser):
     class Tier(models.TextChoices):
         FREE = "free", "Free"
         PAID = "paid", "Paid"
-
+    email = models.EmailField(unique=True)
     tier = models.CharField(
         max_length=10,
         choices=Tier.choices,
