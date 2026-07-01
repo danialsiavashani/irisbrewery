@@ -85,3 +85,44 @@ cv::Mat ImageProcessor::applySketch(const cv::Mat& input, const SketchParams& pa
     cv::Mat result  = invert(dilated);
     return result;
 }
+
+cv::Mat ImageProcessor::applyWatermark(const cv::Mat& input, const std::string& text) {
+    // Clone the input so we don't modify the original
+    // clone() does a deep copy — important because Mat normally uses reference counting
+    cv::Mat result = input.clone();
+
+    // Convert to BGR if grayscale — putText needs a color image to draw colored text
+    // The sketch output is grayscale (1 channel), so we need to convert first
+    if (result.channels() == 1) {
+        cv::cvtColor(result, result, cv::COLOR_GRAY2BGR);
+    }
+
+    // Watermark settings
+    int fontFace    = cv::FONT_HERSHEY_SIMPLEX;
+    double fontScale = std::min(result.cols, result.rows) / 800.0;
+    int thickness   = std::max(3, (int)(fontScale * 3));
+    cv::Scalar color(0, 0, 0); // Pure black
+
+    // Get text size so we can center it
+    int baseline = 0;
+    cv::Size textSize = cv::getTextSize(text, fontFace, fontScale, thickness, &baseline);
+
+    // Draw the watermark diagonally across the image
+    // We stamp it 3 times at different positions for better coverage
+    std::vector<cv::Point> positions = {
+        cv::Point(result.cols / 2 - textSize.width / 2, result.rows / 3),
+        cv::Point(result.cols / 2 - textSize.width / 2, result.rows / 2),
+        cv::Point(result.cols / 2 - textSize.width / 2, result.rows * 2 / 3),
+    };
+
+    for (const auto& pos : positions) {
+        // Draw a dark shadow first for readability on both light and dark backgrounds
+        cv::putText(result, text, cv::Point(pos.x + 2, pos.y + 2),
+                    fontFace, fontScale, cv::Scalar(120, 120, 120), thickness + 1, cv::LINE_AA);
+        // Then draw the light gray text on top
+        cv::putText(result, text, pos,
+                    fontFace, fontScale, color, thickness, cv::LINE_AA);
+    }
+
+    return result;
+}

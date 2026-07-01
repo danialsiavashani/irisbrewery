@@ -24,6 +24,7 @@ public:
 
     // Effects — each is its own method, easy to add more later
     cv::Mat applySketch(const cv::Mat& input, const SketchParams& params);
+    cv::Mat applyWatermark(const cv::Mat& input, const std::string& text = "SKETCHIFY PREVIEW");
 
 private:
     // Internal helpers used by the effects

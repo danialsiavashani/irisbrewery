@@ -19,17 +19,38 @@ int main() {
             return;
         }
 
-        // Parse CV parameters with safe defaults
-        // std::stoi converts string to int — we guard with has_param first
+        // Parse CV parameters from form fields with safe defaults
         SketchParams params;
-        if (req.has_param("blur_amount"))
-            params.blur_amount = std::stoi(req.get_param_value("blur_amount"));
-        if (req.has_param("edge_threshold_low"))
-            params.edge_threshold_low = std::stoi(req.get_param_value("edge_threshold_low"));
-        if (req.has_param("edge_threshold_high"))
-            params.edge_threshold_high = std::stoi(req.get_param_value("edge_threshold_high"));
-        if (req.has_param("line_thickness"))
-            params.line_thickness = std::stoi(req.get_param_value("line_thickness"));
+
+        auto blurIt = req.form.fields.find("blur_amount");
+        if (blurIt != req.form.fields.end())
+            params.blur_amount = std::stoi(blurIt->second.content);
+
+        auto edgeLowIt = req.form.fields.find("edge_threshold_low");
+        if (edgeLowIt != req.form.fields.end())
+            params.edge_threshold_low = std::stoi(edgeLowIt->second.content);
+
+        auto edgeHighIt = req.form.fields.find("edge_threshold_high");
+        if (edgeHighIt != req.form.fields.end())
+            params.edge_threshold_high = std::stoi(edgeHighIt->second.content);
+
+        auto thicknessIt = req.form.fields.find("line_thickness");
+        if (thicknessIt != req.form.fields.end())
+            params.line_thickness = std::stoi(thicknessIt->second.content);
+
+        // Debug — remove after testing
+        std::cout << "blur=" << params.blur_amount
+                  << " edgeLow=" << params.edge_threshold_low
+                  << " edgeHigh=" << params.edge_threshold_high
+                  << " thickness=" << params.line_thickness << std::endl;
+
+        // Check if this is a preview request
+        bool preview = false;
+        auto it = req.form.fields.find("preview");
+        if (it != req.form.fields.end()) {
+            preview = it->second.content == "true";
+        }
+        std::cout << "preview param: " << (preview ? "true" : "false") << std::endl;
 
         // Decode image bytes into cv::Mat
         cv::Mat input = processor.decode(file.content);
@@ -41,6 +62,11 @@ int main() {
 
         // Run the sketch pipeline
         cv::Mat result = processor.applySketch(input, params);
+
+        // Apply watermark if this is a preview
+        if (preview) {
+            result = processor.applyWatermark(result);
+        }
 
         // Encode result as PNG and send back
         std::vector<uchar> encoded = processor.encode(result);
