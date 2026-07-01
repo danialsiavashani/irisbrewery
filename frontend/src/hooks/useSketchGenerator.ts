@@ -30,6 +30,8 @@ export function useSketchGenerator() {
   const [quota, setQuota] = useState<QuotaInfo | null>(null);
   const [params, setParams] = useState<SketchParams>(DEFAULT_PARAMS);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewResult, setPreviewResult] = useState<string | null>(null);
+  const [isPreviewing, setIsPreviewing] = useState(false);
 
   function handleFileChange(file: File) {
     setImage(file);
@@ -89,18 +91,56 @@ export function useSketchGenerator() {
     }
   }
 
+  async function handlePreview() {
+  if (!image) return;
+  setIsPreviewing(true);
+  setError(null);
+
+  const formData = new FormData();
+  formData.append("image", image);
+  formData.append("blur_amount", String(params.blur_amount));
+  formData.append("edge_threshold_low", String(params.edge_threshold_low));
+  formData.append("edge_threshold_high", String(params.edge_threshold_high));
+  formData.append("line_thickness", String(params.line_thickness));
+
+  try {
+    const res = await fetch("/api/preview", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      setError(data.detail ?? "Preview failed.");
+      return;
+    }
+
+    // Get raw PNG bytes and create a temporary browser URL
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    setPreviewResult(url);
+  } catch {
+    setError("Network error. Please try again.");
+  } finally {
+    setIsPreviewing(false);
+  }
+}
+
   return {
-    image,
-    preview,
-    result,
-    isGenerating,
-    error,
-    quota,
-    params,
-    fileInputRef,
-    handleFileChange,
-    handleDrop,
-    updateParam,
-    handleGenerate,
-  };
+  image,
+  preview,
+  result,
+  previewResult,
+  isGenerating,
+  isPreviewing,
+  error,
+  quota,
+  params,
+  fileInputRef,
+  handleFileChange,
+  handleDrop,
+  updateParam,
+  handleGenerate,
+  handlePreview,
+};
 }

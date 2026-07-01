@@ -11,7 +11,9 @@ export default function DashboardPage() {
   const {
     preview,
     result,
+    previewResult,
     isGenerating,
+    isPreviewing,
     error,
     quota,
     params,
@@ -20,6 +22,7 @@ export default function DashboardPage() {
     handleDrop,
     updateParam,
     handleGenerate,
+    handlePreview,
     image,
   } = useSketchGenerator();
 
@@ -27,13 +30,22 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-1 p-6 gap-8 max-w-6xl mx-auto w-full">
-      {/* Left — controls + generate + quota */}
+      {/* Left — controls + buttons + quota */}
       <div className="flex w-64 flex-col gap-6 shrink-0">
         <SketchControls params={params} onParamChange={updateParam} />
 
         {error && <p className="text-sm text-destructive">{error}</p>}
 
         {quota && <QuotaDisplay quota={quota} />}
+
+        <Button
+          variant="outline"
+          onClick={handlePreview}
+          disabled={!image || isPreviewing}
+          className="w-full"
+        >
+          {isPreviewing ? "Previewing..." : "Preview"}
+        </Button>
 
         {!quotaExceeded && (
           <Button
@@ -46,7 +58,7 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Right — image upload + result */}
+      {/* Right — image upload + preview result + final result */}
       <div className="flex flex-1 flex-col gap-4">
         <ImageUpload
           preview={preview}
@@ -54,6 +66,18 @@ export default function DashboardPage() {
           onFileChange={handleFileChange}
           onDrop={handleDrop}
         />
+        {previewResult && !result && (
+          <div className="flex flex-col gap-2">
+            <p className="text-xs text-muted-foreground text-center">
+              Preview — watermarked. Click Generate for the clean version.
+            </p>
+            <img
+              src={previewResult}
+              alt="Watermarked preview"
+              className="max-h-96 rounded-lg object-contain w-full"
+            />
+          </div>
+        )}
         {result && <SketchResult result={result} />}
       </div>
     </div>
