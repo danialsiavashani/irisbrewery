@@ -1,7 +1,12 @@
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { getCurrentUser } from "@/lib/auth";
 
-export default function Home() {
+export default async function Home() {
+  const user = await getCurrentUser();
+  if (user) redirect("/dashboard");
+
   return (
     <div className="flex flex-1 flex-col items-center justify-center p-4">
       <div className="flex max-w-md flex-col items-center gap-6 text-center">
