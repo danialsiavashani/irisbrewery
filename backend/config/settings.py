@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "users",
     "generate",
+    "billing",
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -132,3 +133,11 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
+
+# Stripe
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
+STRIPE_LIFETIME_PRICE_ID = env("STRIPE_LIFETIME_PRICE_ID")
+STRIPE_MONTHLY_PRICE_ID = env("STRIPE_MONTHLY_PRICE_ID")
+
+STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="")
