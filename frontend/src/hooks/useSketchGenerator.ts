@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 export interface SketchParams {
   blur_amount: number;
@@ -91,7 +91,7 @@ export function useSketchGenerator() {
     }
   }
 
-  async function handlePreview() {
+  const handlePreview = useCallback(async () => {
   if (!image) return;
   setIsPreviewing(true);
   setError(null);
@@ -115,7 +115,6 @@ export function useSketchGenerator() {
       return;
     }
 
-    // Get raw PNG bytes and create a temporary browser URL
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
     setPreviewResult(url);
@@ -124,7 +123,18 @@ export function useSketchGenerator() {
   } finally {
     setIsPreviewing(false);
   }
-}
+}, [image, params]);
+
+//debouncing
+useEffect(() => {
+  if (!image) return;
+
+  const timer = setTimeout(() => {
+    handlePreview();
+  }, 500);
+
+  return () => clearTimeout(timer);
+}, [params, image, handlePreview]);
 
   return {
   image,

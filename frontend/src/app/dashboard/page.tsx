@@ -3,7 +3,6 @@
 import { useSketchGenerator } from "@/hooks/useSketchGenerator";
 import { ImageUpload } from "@/components/image-upload";
 import { SketchControls } from "@/components/sketch-controls";
-import { SketchResult } from "@/components/sketch-result";
 import { QuotaDisplay } from "@/components/quota-display";
 import { Button } from "@/components/ui/button";
 
@@ -29,15 +28,14 @@ export default function DashboardPage() {
   const quotaExceeded = quota && quota.used >= quota.limit;
 
   return (
-    <div className="flex flex-1 p-6 gap-8 max-w-6xl mx-auto w-full">
-      {/* Left — controls + buttons + quota */}
-      <div className="flex w-64 flex-col gap-6 shrink-0">
-        <SketchControls params={params} onParamChange={updateParam} />
+  <div className="flex flex-1 gap-4 p-4 max-w-7xl mx-auto w-full">
 
-        {error && <p className="text-sm text-destructive">{error}</p>}
-
+    {/* Left sidebar — controls + buttons */}
+    <div className="flex flex-col gap-4 w-56 shrink-0">
+      <SketchControls params={params} onParamChange={updateParam} />
+      <div className="flex flex-col gap-2">
+        {error && <p className="text-xs text-destructive">{error}</p>}
         {quota && <QuotaDisplay quota={quota} />}
-
         <Button
           variant="outline"
           onClick={handlePreview}
@@ -46,8 +44,7 @@ export default function DashboardPage() {
         >
           {isPreviewing ? "Previewing..." : "Preview"}
         </Button>
-
-        {!quotaExceeded && (
+        {!quotaExceeded ? (
           <Button
             onClick={handleGenerate}
             disabled={!image || isGenerating}
@@ -55,31 +52,59 @@ export default function DashboardPage() {
           >
             {isGenerating ? "Generating..." : "Generate Sketch"}
           </Button>
+        ) : (
+          <Button className="w-full">Upgrade to Pro</Button>
         )}
-      </div>
-
-      {/* Right — image upload + preview result + final result */}
-      <div className="flex flex-1 flex-col gap-4">
-        <ImageUpload
-          preview={preview}
-          fileInputRef={fileInputRef}
-          onFileChange={handleFileChange}
-          onDrop={handleDrop}
-        />
-        {previewResult && !result && (
-          <div className="flex flex-col gap-2">
-            <p className="text-xs text-muted-foreground text-center">
-              Preview — watermarked. Click Generate for the clean version.
-            </p>
-            <img
-              src={previewResult}
-              alt="Watermarked preview"
-              className="max-h-96 rounded-lg object-contain w-full"
-            />
-          </div>
+        {result && (
+          <a href={result} download="sketch.png" className="w-full">
+            <Button variant="outline" className="w-full">Download</Button>
+          </a>
         )}
-        {result && <SketchResult result={result} />}
       </div>
     </div>
-  );
+
+    {/* Center — small original photo */}
+    <div className="flex flex-col gap-2 w-80 shrink-0">
+      <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Original</p>
+      <ImageUpload
+        preview={preview}
+        fileInputRef={fileInputRef}
+        onFileChange={handleFileChange}
+        onDrop={handleDrop}
+      />
+    </div>
+
+    {/* Right — sketch result */}
+    <div className="flex flex-col gap-2 w-80 shrink-0">
+      <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+        {result ? "Sketch" : previewResult ? "Preview" : "Result"}
+      </p>
+      <div className="flex items-center justify-center border-2 border-dashed rounded-xl p-4 h-80">
+        {isPreviewing && (
+          <p className="text-sm text-muted-foreground">Processing...</p>
+        )}
+        {!isPreviewing && previewResult && !result && (
+          <img
+            src={previewResult}
+            alt="Watermarked preview"
+            className="max-h-72 max-w-full rounded-xl object-contain"
+          />
+        )}
+        {!isPreviewing && result && (
+          <img
+            src={result}
+            alt="Sketch result"
+            className="max-h-72 max-w-full rounded-xl object-contain"
+          />
+        )}
+        {!isPreviewing && !previewResult && !result && (
+          <p className="text-sm text-muted-foreground">
+            Upload a photo to see the result
+          </p>
+        )}
+      </div>
+    </div>
+
+  </div>
+);
 }
