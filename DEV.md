@@ -3,6 +3,9 @@
 ## First time only — compile cv-service
 cd cv-service && make
 
+## Every session — start PostgreSQL (if not already running)
+sudo service postgresql start
+
 ## Terminal 1 — cv-service
 cd cv-service && ./cv-service &
 
