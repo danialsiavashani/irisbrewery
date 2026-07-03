@@ -10,9 +10,9 @@ interface SketchControlsProps {
 
 export function SketchControls({ params, onParamChange }: SketchControlsProps) {
   return (
-    <div className="w-full flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <div className="flex justify-between text-sm">
+    <div className="flex w-full flex-col gap-2 lg:gap-6">
+      <div className="flex flex-col gap-1 lg:gap-2">
+        <div className="flex justify-between text-xs lg:text-sm">
           <span>Detail Level</span>
           <span className="text-muted-foreground">{11 - params.blur_amount}</span>
         </div>
@@ -24,8 +24,8 @@ export function SketchControls({ params, onParamChange }: SketchControlsProps) {
         />
       </div>
 
-      <div className="flex flex-col gap-2">
-        <div className="flex justify-between text-sm">
+      <div className="flex flex-col gap-1 lg:gap-2">
+        <div className="flex justify-between text-xs lg:text-sm">
           <span>Edge Sensitivity</span>
           <span className="text-muted-foreground">{params.edge_threshold_low}</span>
         </div>
@@ -40,8 +40,8 @@ export function SketchControls({ params, onParamChange }: SketchControlsProps) {
         />
       </div>
 
-      <div className="flex flex-col gap-2">
-        <div className="flex justify-between text-sm">
+      <div className="flex flex-col gap-1 lg:gap-2">
+        <div className="flex justify-between text-xs lg:text-sm">
           <span>Line Thickness</span>
           <span className="text-muted-foreground">{params.line_thickness}</span>
         </div>

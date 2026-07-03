@@ -21,14 +21,14 @@ interface StyleTabsProps {
 
 export function StyleTabs({ activeStyle, onStyleChange }: StyleTabsProps) {
   return (
-    <div className="grid h-full grid-cols-2 gap-1.5">
+    <div className="grid h-full grid-cols-2 gap-1 lg:gap-1.5">
       {STYLE_OPTIONS.map((style) => (
         <button
           key={style.id}
           type="button"
           disabled={!style.enabled}
           onClick={() => style.enabled && onStyleChange(style.id)}
-          className={`rounded-lg border px-2 py-1 text-xs font-medium transition-colors ${
+          className={`rounded-lg border px-1.5 py-0.5 text-[10px] font-medium transition-colors lg:px-2 lg:py-1 lg:text-xs ${
             activeStyle === style.id
               ? "border-foreground bg-foreground text-background"
               : style.enabled
