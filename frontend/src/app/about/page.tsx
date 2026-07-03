@@ -1,23 +1,25 @@
 import { AuthLayout } from "@/components/auth/AuthLayout";
-import { TechStackScene } from "@/components/about/TechStackScene";
+import { PhotoToSketchScene } from "@/components/about/PhotoToSketchScene";
 
 export default function AboutPage() {
   return (
     <AuthLayout
-      visual={<TechStackScene />}
-      tagline="Next.js, Django, C++ and OpenCV."
+      visual={<PhotoToSketchScene />}
+      tagline="Reliable, no guesswork."
       reverse
     >
       <h1 className="mb-4 text-2xl font-semibold">About Sketchify</h1>
       <p className="mb-6 text-lg text-muted-foreground">
-        Sketchify turns any photo into a pencil-sketch-style image using
-        classical computer vision — no AI models, no guesswork. Same
-        photo, same settings, same result, every time.
+        Sketchify turns your photos into hand-sketched art — no waiting,
+        no surprises, no "try again and hope." Every result is built the
+        same reliable way, every time, so what you see is exactly what
+        you get.
       </p>
       <p className="text-lg text-muted-foreground">
-        Built as a multi-service app — a stateless C++ image processing
-        service, a Django REST API, and a Next.js frontend — each
-        independently deployable.
+        We're starting with pencil sketch. Watercolor, oil painting, and
+        cartoon styles are coming next — and eventually, you'll be able
+        to combine them, layering effects together to create something
+        entirely your own.
       </p>
     </AuthLayout>
   );
