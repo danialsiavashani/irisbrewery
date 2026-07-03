@@ -1,12 +1,11 @@
 "use client";
 
-import { useRef } from "react";
-
 interface ImageUploadProps {
   preview: string | null;
   fileInputRef: React.RefObject<HTMLInputElement | null>;
   onFileChange: (file: File) => void;
   onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
+  className?: string;
 }
 
 export function ImageUpload({
@@ -14,10 +13,11 @@ export function ImageUpload({
   fileInputRef,
   onFileChange,
   onDrop,
+  className = "min-h-96 p-8",
 }: ImageUploadProps) {
   return (
     <div
-      className="w-full min-h-96 border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-ring transition-colors"
+      className={`w-full border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-ring transition-colors ${className}`}
       onDrop={onDrop}
       onDragOver={(e) => e.preventDefault()}
       onClick={() => fileInputRef.current?.click()}
@@ -26,7 +26,7 @@ export function ImageUpload({
         <img
           src={preview}
           alt="Preview"
-          className="max-h-[400px] rounded-lg object-contain"
+          className="max-h-full max-w-full rounded-lg object-contain"
         />
       ) : (
         <>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 interface UpgradeButtonProps {
@@ -9,6 +10,7 @@ interface UpgradeButtonProps {
 }
 
 export function UpgradeButton({ plan, label }: UpgradeButtonProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   async function handleUpgrade() {
@@ -20,10 +22,18 @@ export function UpgradeButton({ plan, label }: UpgradeButtonProps) {
         body: JSON.stringify({ plan }),
       });
 
+      if (res.status === 401) {
+        router.push("/login");
+        return;
+      }
+
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
+        return;
       }
+
+      setLoading(false);
     } catch {
       setLoading(false);
     }
