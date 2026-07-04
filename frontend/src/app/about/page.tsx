@@ -8,9 +8,9 @@ export default function AboutPage() {
       tagline="Reliable, no guesswork."
       reverse
     >
-      <h1 className="mb-4 text-2xl font-semibold">About Sketchify</h1>
+      <h1 className="mb-4 text-2xl font-semibold">About Iris Brewery</h1>
       <p className="mb-6 text-lg text-muted-foreground">
-        Sketchify turns your photos into hand-sketched art — no waiting,
+        Iris Brewery turns your photos into hand-sketched art — no waiting,
         no surprises, no "try again and hope." Every result is built the
         same reliable way, every time, so what you see is exactly what
         you get.

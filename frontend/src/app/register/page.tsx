@@ -10,7 +10,7 @@ export default async function RegisterPage() {
   if (user) redirect("/dashboard");
 
   return (
-    <AuthLayout visual={<KeyScene />} tagline="Get your key to Sketchify.">
+    <AuthLayout visual={<KeyScene />} tagline="Get your key to Iris Brewery.">
       <h1 className="mb-6 text-2xl font-semibold">Create an account</h1>
       <RegisterForm />
       <p className="mt-4 text-sm text-muted-foreground">

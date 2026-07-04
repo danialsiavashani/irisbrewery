@@ -25,7 +25,7 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
 
 
-class SketchifyTokenObtainPairSerializer(TokenObtainPairSerializer):
+class IrisBreweryTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
         data["user"] = UserSerializer(self.user).data
@@ -33,7 +33,7 @@ class SketchifyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class LoginView(TokenObtainPairView):
-    serializer_class = SketchifyTokenObtainPairSerializer
+    serializer_class = IrisBreweryTokenObtainPairSerializer
     permission_classes = [permissions.AllowAny]
 
 
@@ -81,7 +81,7 @@ class PasswordResetRequestView(APIView):
             reset_url = f"{settings.FRONTEND_URL}/reset-password?uid={uid}&token={token}"
 
             send_mail(
-                subject="Reset your Sketchify password",
+                subject="Reset your Iris Brewery password",
                 message=f"Click the link below to reset your password:\n\n{reset_url}\n\nThis link expires in 3 days.",
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[email],

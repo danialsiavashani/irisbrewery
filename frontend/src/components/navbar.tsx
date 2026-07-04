@@ -11,7 +11,7 @@ export async function Navbar() {
     <nav className="flex items-center justify-between border-b px-6 py-3">
       <div className="flex items-center gap-6">
         <Link href="/" className="font-semibold">
-          Sketchify
+          Iris Brewery
         </Link>
         {navLinks.map((link) => (
           <Link

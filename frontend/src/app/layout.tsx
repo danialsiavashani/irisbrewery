@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sketchify",
+  title: "Iris Brewery",
   description: "Turn your photos into pencil sketches.",
 };
 
