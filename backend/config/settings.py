@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "users",
     "generate",
     "billing",
+    "storages",    
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -104,7 +105,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 # Media files (user uploads and generated results)
-MEDIA_URL = "/media/"
+MEDIA_URL = f"{env('R2_PUBLIC_URL')}/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Internal service URLs
@@ -145,3 +146,26 @@ STRIPE_LIFETIME_PRICE_ID = env("STRIPE_LIFETIME_PRICE_ID")
 STRIPE_MONTHLY_PRICE_ID = env("STRIPE_MONTHLY_PRICE_ID")
 
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="")
+
+
+# Cloudflare R2 (S3-compatible storage)
+AWS_ACCESS_KEY_ID = env("R2_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("R2_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = env("R2_BUCKET_NAME")
+AWS_S3_ENDPOINT_URL = env("R2_ENDPOINT_URL")
+AWS_S3_REGION_NAME = "auto"
+AWS_S3_ADDRESSING_STYLE = "path"
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_AUTH = False
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+
