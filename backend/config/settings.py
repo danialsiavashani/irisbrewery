@@ -17,7 +17,11 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[
+    "irisbrewery-backend.onrender.com",
+    "localhost",
+    "127.0.0.1",
+])
 
 # Application definition
 INSTALLED_APPS = [
@@ -34,6 +38,7 @@ INSTALLED_APPS = [
     "generate",
     "billing",
     "storages",    
+    "corsheaders",
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -46,6 +51,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -169,3 +175,9 @@ STORAGES = {
 }
 
 
+CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[
+    "https://irisbrewery.vercel.app",
+    "https://irisbrewery.com",
+    "http://localhost:3000",
+])
+CORS_ALLOW_CREDENTIALS = True
