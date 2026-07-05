@@ -1,5 +1,8 @@
 "use client";
 
+import { DropdownCustom } from "@/components/ui/dropdown-custom";
+import { ChevronDown } from "lucide-react";
+
 interface StyleOption {
   id: string;
   label: string;
@@ -20,25 +23,25 @@ interface StyleTabsProps {
 }
 
 export function StyleTabs({ activeStyle, onStyleChange }: StyleTabsProps) {
+  const active = STYLE_OPTIONS.find((s) => s.id === activeStyle);
+
+  const items = STYLE_OPTIONS.map((style) => ({
+    label: style.label,
+    onClick: style.enabled ? () => onStyleChange(style.id) : undefined,
+    variant: undefined,
+    disabled: !style.enabled,
+  }));
+
   return (
-    <div className="grid h-full grid-cols-2 gap-1 lg:gap-1.5">
-      {STYLE_OPTIONS.map((style) => (
-        <button
-          key={style.id}
-          type="button"
-          disabled={!style.enabled}
-          onClick={() => style.enabled && onStyleChange(style.id)}
-          className={`rounded-lg border px-1.5 py-0.5 text-[10px] font-medium transition-colors lg:px-2 lg:py-1 lg:text-xs ${
-            activeStyle === style.id
-              ? "border-foreground bg-foreground text-background"
-              : style.enabled
-                ? "border-border hover:border-ring"
-                : "border-border text-muted-foreground/50 cursor-not-allowed"
-          }`}
-        >
-          {style.label}
-        </button>
-      ))}
-    </div>
+    <DropdownCustom
+      trigger={
+        <div className="flex items-center justify-between w-full rounded-lg border px-3 py-2 text-sm font-medium cursor-pointer hover:border-ring transition-colors">
+          <span>{active?.label ?? "Style"}</span>
+          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+        </div>
+      }
+      items={items}
+      align="left"
+    />
   );
 }

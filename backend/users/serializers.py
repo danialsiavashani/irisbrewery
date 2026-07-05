@@ -28,6 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
             "tier",
             "generations_used_today",
             "last_generation_reset",
+            "date_joined",
         ]
         read_only_fields = fields
 
